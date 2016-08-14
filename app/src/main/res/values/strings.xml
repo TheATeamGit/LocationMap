@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LocationTest</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="no_address_found">No Adddress found</string>
+</resources>
