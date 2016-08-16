@@ -1,13 +1,14 @@
 package com.example.hasibuzzaman.locationtest;
 
+
+/* https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=23.7842676,90.369294&radius=500&types=food&key= AIzaSyB3PpqkyKKcYOiEw1XjQ2BsjF6zB_x8peI*/
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.renderscript.RenderScript;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -16,12 +17,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     TextView longitudeTv,AddressTV;
     Location latlong;
     AddressResultReceiver resultreceiver;
-    String me;
+    String Address;
 
 
     @Override
@@ -50,7 +48,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-        resultreceiver = new AddressResultReceiver(null);
+        resultreceiver = new AddressResultReceiver(new Handler());
+
+
+
 
     }
 
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
+
+
     }
 
     public void startIntentService()
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Intent intent = new Intent(this,FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER,resultreceiver);
         intent.putExtra(Constants.MY_LOCATION,latlong);  // sending the LAt and Long
+        Log.e("Start Service ", " Start service");
         startService(intent);
 
     }
@@ -105,26 +109,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onLocationChanged(Location location) {
-
         latlong= location;
-        AddressTV.setText(me+"");
+        startIntentService();
+        AddressTV.setText(Address +"");
         lattitudeTv.setText(location.getLatitude()+"");
         longitudeTv.setText(location.getLongitude()+"");
 
+
     }
 
-    public void send(View view) {
+/*    public void send(View view) {
         if (googleApiClient.isConnected() && latlong != null) {
             startIntentService();
         }
 
-    }
+    }*/
 
     public void map(View view) {
         Intent in = new Intent(this, MapsActivity.class);
         in.putExtra(Constants.LATTITUDE,latlong.getLatitude());
         in.putExtra(Constants.LONGITUDE,latlong.getLongitude());
-        final double latitude = latlong.getLatitude();
         startActivity(in);
     }
 
@@ -139,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            me = resultData.getString(Constants.RESULT_DATA_KEY);
+            Address = resultData.getString(Constants.RESULT_DATA_KEY);
             if (resultCode == Constants.SUCCESS_RESULT) {
                 Log.e("onReceiveResult","onReceiveResult");
             }
