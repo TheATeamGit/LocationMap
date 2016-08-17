@@ -11,8 +11,11 @@
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
-
-
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/autocomplete"
+        android:hint="Type in your Location" />
 
     <LinearLayout
         android:orientation="horizontal"
