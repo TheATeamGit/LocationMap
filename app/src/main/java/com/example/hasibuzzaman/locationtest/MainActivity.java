@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Location latlong;
     AddressResultReceiver resultreceiver;
     String Address;
-    private AutoCompleteTextView myLocation;
+    private AutoCompleteTextView myLocationAutoComplete;
     private PlacesAutoCompleteAdapter mPlacesAdapter;
     private static final int PLACE_PICKER_FLAG = 1;
 
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
+    private static final LatLngBounds BOUNDS_GREATER_SYDNEY =null; /*new LatLngBounds(
             new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +72,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         resultreceiver = new AddressResultReceiver(new Handler());
 
 
-        myLocation = (AutoCompleteTextView) findViewById(R.id.myLocation);
+        myLocationAutoComplete = (AutoCompleteTextView) findViewById(R.id.myLocation);
 
         mPlacesAdapter = new PlacesAutoCompleteAdapter(this, android.R.layout.simple_list_item_1,
                 googleApiClient, BOUNDS_GREATER_SYDNEY, null);
 
-        myLocation.setOnItemClickListener(mAutocompleteClickListener);
-        myLocation.setAdapter(mPlacesAdapter);
+        myLocationAutoComplete.setOnItemClickListener(mAutocompleteClickListener);
+        
+        myLocationAutoComplete.setAdapter(mPlacesAdapter);
 
 
     }
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             final String placeId = String.valueOf(item.placeId);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                     .getPlaceById(googleApiClient, placeId);
+            
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
         }
     };
@@ -107,8 +109,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         places.getStatus().toString());
                 return;
             }
-            // Selecting the first object buffer.
+            // Getting the place that is being selected
             final Place place = places.get(0);
+           // myLocationAutoComplete.setVisibility(View.GONE);
+            Toast.makeText(MainActivity.this, place.getAddress()+"",Toast.LENGTH_LONG).show();
         }
     };
 
@@ -161,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onLocationChanged(Location location) {
         latlong= location;
         startIntentService();
-        AddressTV.setText(Address +"");
+
         lattitudeTv.setText(location.getLatitude()+"");
         longitudeTv.setText(location.getLongitude()+"");
 
@@ -194,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             Address = resultData.getString(Constants.RESULT_DATA_KEY);
+            AddressTV.setText(Address +"");
             if (resultCode == Constants.SUCCESS_RESULT) {
                 Log.e("onReceiveResult","onReceiveResult");
             }
@@ -201,6 +206,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         }
     }
+
+
+   /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PLACE_PICKER_FLAG:
+                    Place place = PlacePicker.getPlace(data, this);
+                    myLocation.setText(place.getName() + ", " + place.getAddress());
+                    break;
+            }
+        }
+    }*/
 
 
 }

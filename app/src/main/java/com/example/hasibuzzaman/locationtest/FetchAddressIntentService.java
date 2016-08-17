@@ -31,12 +31,6 @@ public class FetchAddressIntentService extends IntentService {
     }
 
 
-    private void deliverResultToReceiver(int resultCode, String message) {
-        Bundle bundle = new Bundle();
-        Log.e("deliverResultToReceiver", "deliverResultToReceiver ");
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
-        mReceiver.send(resultCode, bundle);
-    }
 
 
     @Override
@@ -92,4 +86,13 @@ public class FetchAddressIntentService extends IntentService {
 
         }
     }
+
+
+    private void deliverResultToReceiver(int resultCode, String message) {
+        Bundle bundle = new Bundle();
+        Log.e("deliverResultToReceiver", "deliverResultToReceiver ");
+        bundle.putString(Constants.RESULT_DATA_KEY, message);
+        mReceiver.send(resultCode, bundle);
+    }
+
 }
