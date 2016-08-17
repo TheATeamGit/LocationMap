@@ -156,7 +156,7 @@ public class PlacesAutoCompleteAdapter
             while (iterator.hasNext()) {
                 AutocompletePrediction prediction = iterator.next();
                 // Get the details of this prediction and copy it into a new PlaceAutocomplete object.
-                resultList.add(new PlaceAutocomplete(prediction.getPlaceId()));
+                resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),prediction.getDescription()));
             }
 
             // Release the buffer now that all data has been copied.
@@ -176,14 +176,14 @@ public class PlacesAutoCompleteAdapter
         public CharSequence placeId;
         public CharSequence description;
 
-        PlaceAutocomplete(CharSequence placeId) {
+        PlaceAutocomplete(CharSequence placeId,CharSequence description) {
             this.placeId = placeId;
             this.description = description;
         }
 
         @Override
         public String toString() {
-            return placeId.toString();
+            return description.toString();
         }
     }
 }
