@@ -18,10 +18,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -31,6 +35,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -67,31 +72,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         resultreceiver = new AddressResultReceiver(new Handler());
 
 
-        AutoCompleteTextView autocompleteView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
-        autocompleteView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
-
-        autocompleteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get data associated with the specified position
-                // in the list (AdapterView)
-                String description = (String) parent.getItemAtPosition(position);
-                Toast.makeText(MainActivity.this, description, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        /*myLocation = (AutoCompleteTextView) findViewById(R.id.myLocation);
+        myLocation = (AutoCompleteTextView) findViewById(R.id.myLocation);
 
         mPlacesAdapter = new PlacesAutoCompleteAdapter(this, android.R.layout.simple_list_item_1,
                 googleApiClient, BOUNDS_GREATER_SYDNEY, null);
 
         myLocation.setOnItemClickListener(mAutocompleteClickListener);
-*/
+        myLocation.setAdapter(mPlacesAdapter);
 
 
     }
 
-    /*private AdapterView.OnItemClickListener mAutocompleteClickListener
+
+
+
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -114,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // Selecting the first object buffer.
             final Place place = places.get(0);
         }
-    };*/
+    };
 
     @Override
     protected void onStart() {
@@ -138,11 +134,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             return;
         }
          LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-
-
-
-
-
 
     }
 
@@ -210,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         }
     }
-
 
 
 }

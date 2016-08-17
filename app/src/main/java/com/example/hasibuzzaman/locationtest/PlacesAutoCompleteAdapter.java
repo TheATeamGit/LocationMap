@@ -2,13 +2,9 @@ package com.example.hasibuzzaman.locationtest;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,134 +23,35 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Zeeshan on 17/2/2016.
  */
-
-class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
-
-    ArrayList<String> resultList;
-
-    Context mContext;
-    int mResource;
-
-    PlaceApi mPlaceAPI = new PlaceApi();
-
-    public PlacesAutoCompleteAdapter(Context context, int resource) {
-        super(context, resource);
-
-        mContext = context;
-        mResource = resource;
-    }
-
-    @Override
-    public int getCount() {
-        // Last item will be the footer
-        return resultList.size();
-    }
-
-    @Override
-    public String getItem(int position) {
-        return resultList.get(position);
-    }
-
-    @Override
-    public Filter getFilter() {
-        Filter filter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults filterResults = new FilterResults();
-                if (constraint != null) {
-                    resultList = mPlaceAPI.autocomplete(constraint.toString());
-
-                    filterResults.values = resultList;
-                    filterResults.count = resultList.size();
-                }
-
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0) {
-                    notifyDataSetChanged();
-                }
-                else {
-                    notifyDataSetInvalidated();
-                }
-            }
-        };
-
-        return filter;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-
-        //if (convertView == null) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        if (position != (resultList.size() - 1))
-            view = inflater.inflate(R.layout.autocomplete_list_item, null);
-        else
-            view = inflater.inflate(R.layout.autocomplete_google_logo, null);
-        //}
-        //else {
-        //    view = convertView;
-        //}
-
-        if (position != (resultList.size() - 1)) {
-            TextView autocompleteTextView = (TextView) view.findViewById(R.id.autocompleteText);
-            autocompleteTextView.setText(resultList.get(position));
-        }
-        else {
-           // ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-            // not sure what to do <img draggable="false" class="emoji" alt="😀" src="https://s.w.org/images/core/emoji/72x72/1f600.png">
-        }
-
-        return view;
-    }
-}
-
-
-/*
 public class PlacesAutoCompleteAdapter
         extends ArrayAdapter<PlacesAutoCompleteAdapter.PlaceAutocomplete> implements Filterable {
 
     private static final String TAG = "PlaceAutocomplete";
-    */
-/**
+    /**
      * Current results returned by this adapter.
-     *//*
-
+     */
     private ArrayList<PlaceAutocomplete> mResultList;
 
-    */
-/**
+    /**
      * Handles autocomplete requests.
-     *//*
-
+     */
     private GoogleApiClient mGoogleApiClient;
 
-    */
-/**
+    /**
      * The bounds used for Places Geo Data autocomplete API requests.
-     *//*
-
+     */
     private LatLngBounds mBounds;
 
-    */
-/**
+    /**
      * The autocomplete filter used to restrict queries to a specific set of place types.
-     *//*
-
+     */
     private AutocompleteFilter mPlaceFilter;
 
-    */
-/**
+    /**
      * Initializes with a resource for text rows and autocomplete query bounds.
      *
      * @see ArrayAdapter#ArrayAdapter(Context, int)
-     *//*
-
+     */
     public PlacesAutoCompleteAdapter(Context context, int resource, GoogleApiClient googleApiClient,
                                      LatLngBounds bounds, AutocompleteFilter filter) {
         super(context, resource);
@@ -163,40 +60,32 @@ public class PlacesAutoCompleteAdapter
         mPlaceFilter = filter;
     }
 
-    */
-/**
+    /**
      * Sets the bounds for all subsequent queries.
-     *//*
-
+     */
     public void setBounds(LatLngBounds bounds) {
         mBounds = bounds;
     }
 
-    */
-/**
+    /**
      * Returns the number of results received in the last autocomplete query.
-     *//*
-
+     */
     @Override
     public int getCount() {
         return mResultList.size();
     }
 
-    */
-/**
+    /**
      * Returns an item from the last autocomplete query.
-     *//*
-
+     */
     @Override
     public PlaceAutocomplete getItem(int position) {
         return mResultList.get(position);
     }
 
-    */
-/**
+    /**
      * Returns the filter for the current set of autocomplete results.
-     *//*
-
+     */
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
@@ -279,11 +168,9 @@ public class PlacesAutoCompleteAdapter
         return null;
     }
 
-    */
-/**
+    /**
      * Holder for Places Geo Data Autocomplete API results.
-     *//*
-
+     */
     public class PlaceAutocomplete {
 
         public CharSequence placeId;
@@ -291,12 +178,12 @@ public class PlacesAutoCompleteAdapter
 
         PlaceAutocomplete(CharSequence placeId) {
             this.placeId = placeId;
-            //this.description = description;
+            this.description = description;
         }
 
         @Override
         public String toString() {
-            return description.toString();
+            return placeId.toString();
         }
     }
-}*/
+}
